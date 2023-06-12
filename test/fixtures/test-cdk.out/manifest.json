@@ -1,0 +1,94 @@
+{
+  "version": "31.0.0",
+  "artifacts": {
+    "TestFixturesStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "TestFixturesStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "TestFixturesStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "TestFixturesStack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/512e840e820bfbcd2640bdd1ef0a621b2be262ef3fa09e90335919a5699ff2ff.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "TestFixturesStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "TestFixturesStack.assets"
+      ],
+      "metadata": {
+        "/TestFixturesStack/DockerImageFunction1/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DockerImageFunction1ServiceRole943AC69A"
+          }
+        ],
+        "/TestFixturesStack/DockerImageFunction1/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DockerImageFunction1B4CF195F"
+          }
+        ],
+        "/TestFixturesStack/DockerImageFunction2/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DockerImageFunction2ServiceRole75800258"
+          }
+        ],
+        "/TestFixturesStack/DockerImageFunction2/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "DockerImageFunction22AE8D223"
+          }
+        ],
+        "/TestFixturesStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/TestFixturesStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/TestFixturesStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/TestFixturesStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "TestFixturesStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}
