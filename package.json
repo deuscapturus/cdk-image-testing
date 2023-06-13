@@ -3,6 +3,9 @@
   "version": "0.2.0",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:deuscapturus/cdk-image-testing.git"},
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
