@@ -12,12 +12,27 @@ export interface TestingDockerImageManifestEntry extends DockerImageManifestEntr
  * 
  * @example
  * 
- * TODO
+ * describe('container images', () => {
+ *   const imageAssets = new ImageAssetTesting('cdk.out/assembly-dev')
+ *   it('pass local tests', async () => {
+ *     const imageTags = await imageAssets.buildAll("test")
+ * 
+ *     for (let tag of imageTags) {
+ *       const result = spawnSync('docker', ['run', tag]);
+ * 
+ *       if (result.status !== 0) {
+ *         console.error(result.stdout.toString())
+ *         console.error(result.stderr.toString())
+ *       }
+ *       expect(result.status).toBe(0);
+ *     }
+ *   })
+ * })
  */
 export class ImageAssetTesting {
     public readonly imageAssets: TestingDockerImageManifestEntry[] = []
 
-    public docker: Docker
+    private docker: Docker
 
     constructor(cloudAssemblyPath: string) {
         this.docker = new Docker()
@@ -37,10 +52,16 @@ export class ImageAssetTesting {
                 })
             }
         }
-
     }
 
-    public async buildAll(): Promise<string[]> {
+    /**
+     * Build all container image assets in the cloud assembly.
+     * 
+     * @param buildTarget Container build target.  Defaults to the default target in the cloud assembly.
+     * 
+     * @returns List of built image tags
+     */
+    public async buildAll(buildTarget?: string): Promise<string[]> {
         let buildTags: string[] = []
 
         let builds: Promise<void>[] = []
@@ -53,7 +74,7 @@ export class ImageAssetTesting {
                 tag,
                 buildArgs: entry.source.dockerBuildArgs,
                 buildSecrets: entry.source.dockerBuildSecrets,
-                target: entry.source.dockerBuildTarget,
+                target: buildTarget ?? entry.source.dockerBuildTarget,
                 file: entry.source.dockerFile,
                 networkMode: entry.source.networkMode,
                 platform: entry.source.platform,

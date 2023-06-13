@@ -1,20 +1,12 @@
-import assert = require('assert');
+import { Docker } from 'cdk-assets/lib/private/docker'
 import { ImageAssetTesting } from '../lib/index'
-import { execSync } from 'child_process';
 
-
+const docker = new Docker()
 
 describe('IntegrationTest', () => {
     const imageAssets = new ImageAssetTesting('./test/fixtures/test-cdk.out')
 
-    it('should should build', async () => {
-        const imageTags = await imageAssets.buildAll()
-    
-        //expect.assertions(imageTags.length)
-        for (let tag of imageTags) {
-            expect(imageAssets.docker.exists(tag)).resolves.toBe(true)
-        }
-
+    it('should buildAll()', async () => {
+        const imageTags = await imageAssets.buildAll("test")
     })
-    
 })

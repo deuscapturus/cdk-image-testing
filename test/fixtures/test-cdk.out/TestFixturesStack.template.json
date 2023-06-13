@@ -39,7 +39,7 @@
    "Properties": {
     "Code": {
      "ImageUri": {
-      "Fn::Sub": "${AWS::AccountId}.dkr.ecr.${AWS::Region}.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}:16810b3d9f912ff501944582a668fe24f71247b73e145965d319f8db847bdba4"
+      "Fn::Sub": "${AWS::AccountId}.dkr.ecr.${AWS::Region}.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}:45d053740331b4dd7bf905e8fd48f58f62aa90019ed3421c5c869dde1744f79e"
      }
     },
     "Role": {
@@ -55,7 +55,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "TestFixturesStack/DockerImageFunction1/Resource",
-    "aws:asset:path": "asset.16810b3d9f912ff501944582a668fe24f71247b73e145965d319f8db847bdba4",
+    "aws:asset:path": "asset.45d053740331b4dd7bf905e8fd48f58f62aa90019ed3421c5c869dde1744f79e",
     "aws:asset:dockerfile-path": "Dockerfile",
     "aws:asset:property": "Code.ImageUri"
    }
@@ -99,7 +99,7 @@
    "Properties": {
     "Code": {
      "ImageUri": {
-      "Fn::Sub": "${AWS::AccountId}.dkr.ecr.${AWS::Region}.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}:16810b3d9f912ff501944582a668fe24f71247b73e145965d319f8db847bdba4"
+      "Fn::Sub": "${AWS::AccountId}.dkr.ecr.${AWS::Region}.${AWS::URLSuffix}/cdk-hnb659fds-container-assets-${AWS::AccountId}-${AWS::Region}:45d053740331b4dd7bf905e8fd48f58f62aa90019ed3421c5c869dde1744f79e"
      }
     },
     "Role": {
@@ -115,7 +115,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "TestFixturesStack/DockerImageFunction2/Resource",
-    "aws:asset:path": "asset.16810b3d9f912ff501944582a668fe24f71247b73e145965d319f8db847bdba4",
+    "aws:asset:path": "asset.45d053740331b4dd7bf905e8fd48f58f62aa90019ed3421c5c869dde1744f79e",
     "aws:asset:dockerfile-path": "Dockerfile",
     "aws:asset:property": "Code.ImageUri"
    }
