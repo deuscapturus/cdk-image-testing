@@ -67,14 +67,17 @@ export class ImageAssetTesting {
         let builds: Promise<void>[] = []
 
         for (let entry of this.imageAssets) {
-            const tag = `cdkasset-${entry.id.assetId.toLowerCase()}`
+            const target = buildTarget ?? entry.source.dockerBuildTarget
+            const targetTag = target ? `-${target}` : ''
+            const tag = `cdkasset-${entry.id.assetId.toLowerCase()}${targetTag}:test`
+
             buildTags.push(tag)
             builds.push(this.docker.build({
                 directory: path.join(entry.manifestDirectory, entry.source.directory!),
                 tag,
                 buildArgs: entry.source.dockerBuildArgs,
                 buildSecrets: entry.source.dockerBuildSecrets,
-                target: buildTarget ?? entry.source.dockerBuildTarget,
+                target,
                 file: entry.source.dockerFile,
                 networkMode: entry.source.networkMode,
                 platform: entry.source.platform,
