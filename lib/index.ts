@@ -5,6 +5,15 @@ import * as path from 'path';
 
 export interface TestingDockerImageManifestEntry extends DockerImageManifestEntry {
     manifestDirectory: string
+    /**
+     * Docker build this image asset
+     * 
+     * @param buildTarget Container build target.  Defaults to the default target in the cloud assembly.
+     * 
+     * @returns The built image tag
+     */
+    buildTarget(buildTarget?: string): Promise<string>
+    docker: Docker
 }
 
 /**
@@ -44,9 +53,32 @@ export class ImageAssetTesting {
                 const assetManifest = AssetManifest.fromPath(path.join(cloudAssemblyPath, properties.file))
                 assetManifest.entries.forEach(entry => {
                     if (entry.type === 'docker-image') {
+                        const dockerEntry = entry as DockerImageManifestEntry
                         this.imageAssets.push({
                             manifestDirectory: assetManifest.directory,
-                            ...entry as DockerImageManifestEntry,
+                            docker: this.docker,
+                            buildTarget(buildTarget?: string): Promise<string> {
+                                const target = buildTarget ?? dockerEntry.source.dockerBuildTarget
+                                const targetTag = target ? `-${target}` : ''
+                                const tag = `cdkasset-${entry.id.assetId.toLowerCase()}${targetTag}:test`
+
+                                const buildPromise = this.docker.build({
+                                    directory: path.join(this.manifestDirectory, dockerEntry.source.directory!),
+                                    tag,
+                                    buildArgs: dockerEntry.source.dockerBuildArgs,
+                                    buildSecrets: dockerEntry.source.dockerBuildSecrets,
+                                    target,
+                                    file: dockerEntry.source.dockerFile,
+                                    networkMode: dockerEntry.source.networkMode,
+                                    platform: dockerEntry.source.platform,
+                                    outputs: dockerEntry.source.dockerOutputs,
+                                    cacheFrom: dockerEntry.source.cacheFrom,
+                                    cacheTo: dockerEntry.source.cacheTo,
+                                });
+
+                                return buildPromise.then(() => tag)
+                            },
+                            ...dockerEntry,
                         })
                     }
                 })
@@ -64,7 +96,7 @@ export class ImageAssetTesting {
     public async buildAll(buildTarget?: string): Promise<string[]> {
         let buildTags: string[] = []
 
-        let builds: Promise<void>[] = []
+        let builds: Promise<string>[] = []
 
         for (let entry of this.imageAssets) {
             const target = buildTarget ?? entry.source.dockerBuildTarget
@@ -72,23 +104,9 @@ export class ImageAssetTesting {
             const tag = `cdkasset-${entry.id.assetId.toLowerCase()}${targetTag}:test`
 
             buildTags.push(tag)
-            builds.push(this.docker.build({
-                directory: path.join(entry.manifestDirectory, entry.source.directory!),
-                tag,
-                buildArgs: entry.source.dockerBuildArgs,
-                buildSecrets: entry.source.dockerBuildSecrets,
-                target,
-                file: entry.source.dockerFile,
-                networkMode: entry.source.networkMode,
-                platform: entry.source.platform,
-                outputs: entry.source.dockerOutputs,
-                cacheFrom: entry.source.cacheFrom,
-                cacheTo: entry.source.cacheTo,
-            }));
+            builds.push(entry.buildTarget(buildTarget));
         }
 
-        await Promise.all(builds)
-
-        return buildTags
+        return await Promise.all(builds)
     }
 }
